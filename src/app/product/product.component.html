@@ -1,0 +1,744 @@
+
+<div class="container-sm-12">
+  <!--ΚΑΦΕΔΕΣ-->
+  <div class="container">
+    <h2>ΚΑΦΕΔΕΣ</h2>
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6" *ngFor="let product of products_Kafedes">
+          <div class="card"
+          style="background-color: #ededdd;
+          margin-bottom: 20px;
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); ">
+            <div class="row">
+              <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3" >
+                <span >
+                  <img src="{{product.p_imagePath}}" class="p_img">
+                </span>
+              </div>
+              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"
+              style="text-align: left;"><h5>{{product.p_name}}</h5><p style="font-size: 12px;">{{product.p_info}}</p></div>
+              <div class="col">
+                <ul class="list-group">
+                  <li class="list-group-item" style="background-color: #ededdd; text-align:center;">
+                    <h5>€ {{product.p_price}}</h5>
+                  </li>
+                  <li
+                  *ngIf="product.p_hasExtra"
+                  class="list-group-item"
+                  style="padding:0px; cursor: pointer;"
+                  (click)="product.p_showExtra=!product.p_showExtra"
+                  [ngStyle]="{backgroundColor: product.p_showExtra==true  ? 'rgb(207, 13, 13)' :  '#ededdd' }">
+                      <div class="row" style="padding-top: 6px;">
+                        <p
+                        *ngIf="!product.p_showExtra"
+                        style="font-size: smaller; margin-right: auto; margin-left: auto;" >
+                          <i class="arrow-down"></i>Πρόσθετα
+                        </p>
+                        <p
+                        *ngIf="product.p_showExtra"
+                        style="font-size: smaller; margin-right: auto; margin-left: auto; color: white;" >
+                          <i class="arrow-up"></i>Πρόσθετα
+                        </p>
+                      </div>
+                  </li>
+                  <li
+                  *ngIf="!product.p_hasExtra"
+                  class="list-group-item"
+                  style="padding:0px; cursor: pointer;"
+                  (click)="product.p_showExtra=!product.p_showExtra"
+                  [ngStyle]="{backgroundColor: product.p_showExtra==true  ? 'rgb(207, 13, 13)' :  '#ededdd' }">
+                      <div class="row" style="padding-top: 6px;">
+                        <p
+                        *ngIf="!product.p_showExtra"
+                        style="font-size: smaller; margin-right: auto; margin-left: auto;" >
+                          <i class="arrow-down"></i>Σχόλια
+                        </p>
+                        <p
+                        *ngIf="product.p_showExtra"
+                        style="font-size: smaller; margin-right: auto; margin-left: auto; color: white;" >
+                          <i class="arrow-up"></i>Σχόλια
+                        </p>
+                      </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="col-xs-12 col-sm-2 col-md-2 col-lg" >
+                <span style="align-items: center;">
+                  <p style="margin-bottom: 5px">Ποσότητα</p>
+                  <a (click)="((product.p_quantity > 1) ? product.p_quantity = product.p_quantity - 1 : product.p_quantity = 1)">
+                    <img src="./assets/images/products/minusIcon.webp" style="width: 15px; height:20px; margin-right: 2px;">
+                  </a>
+                  <input type="text" size="1" style="text-align: center; border-radius: 0.5em;" value="{{product.p_quantity}}" >
+                  <a (click)="product.p_quantity = product.p_quantity + 1">
+                    <img src="./assets/images/products/plusIcon.png" style="width: 10px; height:10px; margin-left: 5px; ">
+                  </a>
+                  <br>
+                  <a (click)="onAddCart(product)" style="align-items: center;">
+                    <img src="./assets/images/products/addToCartIcon.png" style="width: 70px; height:30px; margin-top:7px; margin-left:2px; margin-right:2px;">
+                  </a>
+                </span>
+              </div>
+            </div>
+            <ul class="list-group" *ngIf="product.p_showExtra && product.p_hasExtra">
+              <div class="row" style="padding-left: 40px;" >
+                <div class="col-12" style="padding-top: 15px;">
+                  <h6><b>Επιπλέον</b></h6>
+                </div>
+                  <br><br>
+                  <div class="col-6" *ngFor="let more of product.p_extras; let i=index">
+                    <label class="check">{{more.e_name}}
+                      <input type="checkbox"
+                      name="{{more}}" [checked]="more.e_checked" (change)="more.e_checked =! more.e_checked">
+                      <span class="check-box"></span>
+                    </label>
+                  </div>
+              </div>
+              <div class="row" style="padding-left: 40px;" >
+                <div class="col-md-12" style="padding-top: 10px;">
+                  <h6><b>Σχόλια</b></h6>
+                </div>
+                <br><br>
+                <textarea
+                rows="4" cols="100"
+                name="comments" id="{{product.p_comments}}"
+                placeholder="Εισάγετε σχόλια για το προϊόν"
+                style="resize: none; width: 100%; margin-left: 25px;margin-right: 65px; margin-bottom: 20px; border-radius: 0.2em;"
+                [(ngModel)]="product.p_comments"></textarea>
+              </div>
+            </ul>
+            <ul class="list-group" *ngIf="product.p_showExtra && !product.p_hasExtra">
+              <div class="row" style="padding-left: 40px;" >
+                <div class="col-md-12" style="padding-top: 10px;">
+                  <h6><b>Σχόλια</b></h6>
+                </div>
+                <br><br>
+                <textarea
+                rows="4" cols="100"
+                name="comments" id="{{product.p_comments}}"
+                placeholder="Εισάγετε σχόλια για το προϊόν"
+                style="resize: none; width: 100%; margin-left: 25px;margin-right: 65px; margin-bottom: 20px; border-radius: 0.2em;"
+                [(ngModel)]="product.p_comments"></textarea>
+              </div>
+            </ul>
+          </div>
+      </div>
+    </div>
+  </div>
+  <!--ΑΝΑΨΥΚΤΙΚΑ-->
+  <div class="container">
+    <h2>ΑΝΑΨΥΚΤΙΚΑ</h2>
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6" *ngFor="let product of products_Anapsiktika">
+          <div class="card"
+          style="background-color: #ededdd;
+          margin-bottom: 20px;
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); ">
+            <div class="row">
+              <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3" >
+                <span >
+                  <img src="{{product.p_imagePath}}" class="p_img">
+                </span>
+              </div>
+              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"
+              style="text-align: left;"><h5>{{product.p_name}}</h5><p style="font-size: 12px;">{{product.p_info}}</p></div>
+              <div class="col">
+                <ul class="list-group">
+                  <li class="list-group-item" style="background-color: #ededdd; text-align:center;">
+                    <h5>€ {{product.p_price}}</h5>
+                  </li>
+                  <li
+                  *ngIf="product.p_hasExtra"
+                  class="list-group-item"
+                  style="padding:0px; cursor: pointer;"
+                  (click)="product.p_showExtra=!product.p_showExtra"
+                  [ngStyle]="{backgroundColor: product.p_showExtra==true  ? 'rgb(207, 13, 13)' :  '#ededdd' }">
+                      <div class="row" style="padding-top: 6px;">
+                        <p
+                        *ngIf="!product.p_showExtra"
+                        style="font-size: smaller; margin-right: auto; margin-left: auto;" >
+                          <i class="arrow-down"></i>Πρόσθετα
+                        </p>
+                        <p
+                        *ngIf="product.p_showExtra"
+                        style="font-size: smaller; margin-right: auto; margin-left: auto; color: white;" >
+                          <i class="arrow-up"></i>Πρόσθετα
+                        </p>
+                      </div>
+                  </li>
+                  <li
+                  *ngIf="!product.p_hasExtra"
+                  class="list-group-item"
+                  style="padding:0px; cursor: pointer;"
+                  (click)="product.p_showExtra=!product.p_showExtra"
+                  [ngStyle]="{backgroundColor: product.p_showExtra==true  ? 'rgb(207, 13, 13)' :  '#ededdd' }">
+                      <div class="row" style="padding-top: 6px;">
+                        <p
+                        *ngIf="!product.p_showExtra"
+                        style="font-size: smaller; margin-right: auto; margin-left: auto;" >
+                          <i class="arrow-down"></i>Σχόλια
+                        </p>
+                        <p
+                        *ngIf="product.p_showExtra"
+                        style="font-size: smaller; margin-right: auto; margin-left: auto; color: white;" >
+                          <i class="arrow-up"></i>Σχόλια
+                        </p>
+                      </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="col-xs-12 col-sm-2 col-md-2 col-lg" >
+                <span style="align-items: center;">
+                  <p style="margin-bottom: 5px">Ποσότητα</p>
+                  <a (click)="((product.p_quantity > 1) ? product.p_quantity = product.p_quantity - 1 : product.p_quantity = 1)">
+                    <img src="./assets/images/products/minusIcon.webp" style="width: 15px; height:20px; margin-right: 2px;">
+                  </a>
+                  <input type="text" size="1" style="text-align: center; border-radius: 0.5em;" value="{{product.p_quantity}}" >
+                  <a (click)="product.p_quantity = product.p_quantity + 1">
+                    <img src="./assets/images/products/plusIcon.png" style="width: 10px; height:10px; margin-left: 5px; ">
+                  </a>
+                  <br>
+                  <a (click)="onAddCart(product)" style="align-items: center;">
+                    <img src="./assets/images/products/addToCartIcon.png" style="width: 70px; height:30px; margin-top:7px; margin-left:2px; margin-right:2px;">
+                  </a>
+                </span>
+              </div>
+            </div>
+            <ul class="list-group" *ngIf="product.p_showExtra && product.p_hasExtra">
+              <div class="row" style="padding-left: 40px;" >
+                <div class="col-12" style="padding-top: 15px;">
+                  <h6><b>Επιπλέον</b></h6>
+                </div>
+                  <br><br>
+                  <div class="col-6" *ngFor="let more of product.p_extras; let i=index">
+                    <label class="check">{{more.e_name}}
+                      <input type="checkbox"
+                      name="{{more}}" [checked]="more.e_checked" (change)="more.e_checked =! more.e_checked">
+                      <span class="check-box"></span>
+                    </label>
+                  </div>
+              </div>
+              <div class="row" style="padding-left: 40px;" >
+                <div class="col-md-12" style="padding-top: 10px;">
+                  <h6><b>Σχόλια</b></h6>
+                </div>
+                <br><br>
+                <textarea
+                rows="4" cols="100"
+                name="comments" id="{{product.p_comments}}"
+                placeholder="Εισάγετε σχόλια για το προϊόν"
+                style="resize: none; width: 100%; margin-left: 25px;margin-right: 65px; margin-bottom: 20px; border-radius: 0.2em;"
+                [(ngModel)]="product.p_comments"></textarea>
+              </div>
+            </ul>
+            <ul class="list-group" *ngIf="product.p_showExtra && !product.p_hasExtra">
+              <div class="row" style="padding-left: 40px;" >
+                <div class="col-md-12" style="padding-top: 10px;">
+                  <h6><b>Σχόλια</b></h6>
+                </div>
+                <br><br>
+                <textarea
+                rows="4" cols="100"
+                name="comments" id="{{product.p_comments}}"
+                placeholder="Εισάγετε σχόλια για το προϊόν"
+                style="resize: none; width: 100%; margin-left: 25px;margin-right: 65px; margin-bottom: 20px; border-radius: 0.2em;"
+                [(ngModel)]="product.p_comments"></textarea>
+              </div>
+            </ul>
+          </div>
+      </div>
+  </div>
+  <!--ΧΥΜΟΙ-->
+    <h2>ΧΥΜΟΙ</h2>
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6" *ngFor="let product of products_Ximoi">
+          <div class="card"
+          style="background-color: #ededdd;
+          margin-bottom: 20px;
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); ">
+            <div class="row">
+              <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3" >
+                <span >
+                  <img src="{{product.p_imagePath}}" class="p_img">
+                </span>
+              </div>
+              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"
+              style="text-align: left; padding-right: 0px;"><h5>{{product.p_name}}</h5><p style="font-size: 12px;">{{product.p_info}}</p></div>
+              <div class="col">
+                <ul class="list-group">
+                  <li class="list-group-item" style="background-color: #ededdd; text-align:center;">
+                    <h5>€ {{product.p_price}}</h5>
+                  </li>
+                  <li
+                  *ngIf="product.p_hasExtra"
+                  class="list-group-item"
+                  style="padding:0px; cursor: pointer;"
+                  (click)="product.p_showExtra=!product.p_showExtra"
+                  [ngStyle]="{backgroundColor: product.p_showExtra==true  ? 'rgb(207, 13, 13)' :  '#ededdd' }">
+                      <div class="row" style="padding-top: 6px;">
+                        <p
+                        *ngIf="!product.p_showExtra"
+                        style="font-size: smaller; margin-right: auto; margin-left: auto;" >
+                          <i class="arrow-down"></i>Πρόσθετα
+                        </p>
+                        <p
+                        *ngIf="product.p_showExtra"
+                        style="font-size: smaller; margin-right: auto; margin-left: auto; color: white;" >
+                          <i class="arrow-up"></i>Πρόσθετα
+                        </p>
+                      </div>
+                  </li>
+                  <li
+                  *ngIf="!product.p_hasExtra"
+                  class="list-group-item"
+                  style="padding:0px; cursor: pointer;"
+                  (click)="product.p_showExtra=!product.p_showExtra"
+                  [ngStyle]="{backgroundColor: product.p_showExtra==true  ? 'rgb(207, 13, 13)' :  '#ededdd' }">
+                      <div class="row" style="padding-top: 6px;">
+                        <p
+                        *ngIf="!product.p_showExtra"
+                        style="font-size: smaller; margin-right: auto; margin-left: auto;" >
+                          <i class="arrow-down"></i>Σχόλια
+                        </p>
+                        <p
+                        *ngIf="product.p_showExtra"
+                        style="font-size: smaller; margin-right: auto; margin-left: auto; color: white;" >
+                          <i class="arrow-up"></i>Σχόλια
+                        </p>
+                      </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="col-xs-12 col-sm-2 col-md-2 col-lg" >
+                <span style="align-items: center;">
+                  <p style="margin-bottom: 5px">Ποσότητα</p>
+                  <a (click)="((product.p_quantity > 1) ? product.p_quantity = product.p_quantity - 1 : product.p_quantity = 1)">
+                    <img src="./assets/images/products/minusIcon.webp" style="width: 15px; height:20px; margin-right: 2px;">
+                  </a>
+                  <input type="text" size="1" style="text-align: center; border-radius: 0.5em;" value="{{product.p_quantity}}" >
+                  <a (click)="product.p_quantity = product.p_quantity + 1">
+                    <img src="./assets/images/products/plusIcon.png" style="width: 10px; height:10px; margin-left: 5px; ">
+                  </a>
+                  <br>
+                  <a (click)="onAddCart(product)" style="align-items: center;">
+                    <img src="./assets/images/products/addToCartIcon.png" style="width: 70px; height:30px; margin-top:7px; margin-left:2px; margin-right:2px;">
+                  </a>
+                </span>
+              </div>
+            </div>
+            <ul class="list-group" *ngIf="product.p_showExtra && product.p_hasExtra">
+              <div class="row" style="padding-left: 40px;" >
+                <div class="col-12" style="padding-top: 15px;">
+                  <h6><b>Επιπλέον</b></h6>
+                </div>
+                  <br><br>
+                  <div class="col-6" *ngFor="let more of product.p_extras; let i=index">
+                    <label class="check">{{more.e_name}}
+                      <input type="checkbox"
+                      name="{{more}}" [checked]="more.e_checked" (change)="more.e_checked =! more.e_checked">
+                      <span class="check-box"></span>
+                    </label>
+                  </div>
+              </div>
+              <div class="row" style="padding-left: 40px;" >
+                <div class="col-md-12" style="padding-top: 10px;">
+                  <h6><b>Σχόλια</b></h6>
+                </div>
+                <br><br>
+                <textarea
+                rows="4" cols="100"
+                name="comments" id="{{product.p_comments}}"
+                placeholder="Εισάγετε σχόλια για το προϊόν"
+                style="resize: none; width: 100%; margin-left: 25px;margin-right: 65px; margin-bottom: 20px; border-radius: 0.2em;"
+                [(ngModel)]="product.p_comments"></textarea>
+              </div>
+            </ul>
+            <ul class="list-group" *ngIf="product.p_showExtra && !product.p_hasExtra">
+              <div class="row" style="padding-left: 40px;" >
+                <div class="col-md-12" style="padding-top: 10px;">
+                  <h6><b>Σχόλια</b></h6>
+                </div>
+                <br><br>
+                <textarea
+                rows="4" cols="100"
+                name="comments" id="{{product.p_comments}}"
+                placeholder="Εισάγετε σχόλια για το προϊόν"
+                style="resize: none; width: 100%; margin-left: 25px;margin-right: 65px; margin-bottom: 20px; border-radius: 0.2em;"
+                [(ngModel)]="product.p_comments"></textarea>
+              </div>
+            </ul>
+          </div>
+      </div>
+    </div>
+    <!--ΜΠΥΡΕΣ-->
+    <h2>ΜΠΥΡΕΣ</h2>
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6" *ngFor="let product of products_Mpires">
+          <div class="card"
+          style="background-color: #ededdd;
+          margin-bottom: 20px;
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); ">
+            <div class="row">
+              <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3" >
+                <span >
+                  <img src="{{product.p_imagePath}}" class="p_img">
+                </span>
+              </div>
+              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"
+              style="text-align: left; padding-right: 0px;"><h5>{{product.p_name}}</h5><p style="font-size: 12px;">{{product.p_info}}</p></div>
+              <div class="col">
+                <ul class="list-group">
+                  <li class="list-group-item" style="background-color: #ededdd; text-align:center;">
+                    <h5>€ {{product.p_price}}</h5>
+                  </li>
+                  <li
+                  *ngIf="product.p_hasExtra"
+                  class="list-group-item"
+                  style="padding:0px; cursor: pointer;"
+                  (click)="product.p_showExtra=!product.p_showExtra"
+                  [ngStyle]="{backgroundColor: product.p_showExtra==true  ? 'rgb(207, 13, 13)' :  '#ededdd' }">
+                      <div class="row" style="padding-top: 6px;">
+                        <p
+                        *ngIf="!product.p_showExtra"
+                        style="font-size: smaller; margin-right: auto; margin-left: auto;" >
+                          <i class="arrow-down"></i>Πρόσθετα
+                        </p>
+                        <p
+                        *ngIf="product.p_showExtra"
+                        style="font-size: smaller; margin-right: auto; margin-left: auto; color: white;" >
+                          <i class="arrow-up"></i>Πρόσθετα
+                        </p>
+                      </div>
+                  </li>
+                  <li
+                  *ngIf="!product.p_hasExtra"
+                  class="list-group-item"
+                  style="padding:0px; cursor: pointer;"
+                  (click)="product.p_showExtra=!product.p_showExtra"
+                  [ngStyle]="{backgroundColor: product.p_showExtra==true  ? 'rgb(207, 13, 13)' :  '#ededdd' }">
+                      <div class="row" style="padding-top: 6px;">
+                        <p
+                        *ngIf="!product.p_showExtra"
+                        style="font-size: smaller; margin-right: auto; margin-left: auto;" >
+                          <i class="arrow-down"></i>Σχόλια
+                        </p>
+                        <p
+                        *ngIf="product.p_showExtra"
+                        style="font-size: smaller; margin-right: auto; margin-left: auto; color: white;" >
+                          <i class="arrow-up"></i>Σχόλια
+                        </p>
+                      </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="col-xs-12 col-sm-2 col-md-2 col-lg" >
+                <span style="align-items: center;">
+                  <p style="margin-bottom: 5px">Ποσότητα</p>
+                  <a (click)="((product.p_quantity > 1) ? product.p_quantity = product.p_quantity - 1 : product.p_quantity = 1)">
+                    <img src="./assets/images/products/minusIcon.webp" style="width: 15px; height:20px; margin-right: 2px;">
+                  </a>
+                  <input type="text" size="1" style="text-align: center; border-radius: 0.5em;" value="{{product.p_quantity}}" >
+                  <a (click)="product.p_quantity = product.p_quantity + 1">
+                    <img src="./assets/images/products/plusIcon.png" style="width: 10px; height:10px; margin-left: 5px; ">
+                  </a>
+                  <br>
+                  <a (click)="onAddCart(product)" style="align-items: center;">
+                    <img src="./assets/images/products/addToCartIcon.png" style="width: 70px; height:30px; margin-top:7px; margin-left:2px; margin-right:2px;">
+                  </a>
+                </span>
+              </div>
+            </div>
+            <ul class="list-group" *ngIf="product.p_showExtra && product.p_hasExtra">
+              <div class="row" style="padding-left: 40px;" >
+                <div class="col-12" style="padding-top: 15px;">
+                  <h6><b>Επιπλέον</b></h6>
+                </div>
+                  <br><br>
+                  <div class="col-6" *ngFor="let more of product.p_extras; let i=index">
+                    <label class="check">{{more.e_name}}
+                      <input type="checkbox"
+                      name="{{more}}" [checked]="more.e_checked" (change)="more.e_checked =! more.e_checked">
+                      <span class="check-box"></span>
+                    </label>
+                  </div>
+              </div>
+              <div class="row" style="padding-left: 40px;" >
+                <div class="col-md-12" style="padding-top: 10px;">
+                  <h6><b>Σχόλια</b></h6>
+                </div>
+                <br><br>
+                <textarea
+                rows="4" cols="100"
+                name="comments" id="{{product.p_comments}}"
+                placeholder="Εισάγετε σχόλια για το προϊόν"
+                style="resize: none; width: 100%; margin-left: 25px;margin-right: 65px; margin-bottom: 20px; border-radius: 0.2em;"
+                [(ngModel)]="product.p_comments"></textarea>
+              </div>
+            </ul>
+            <ul class="list-group" *ngIf="product.p_showExtra && !product.p_hasExtra">
+              <div class="row" style="padding-left: 40px;" >
+                <div class="col-md-12" style="padding-top: 10px;">
+                  <h6><b>Σχόλια</b></h6>
+                </div>
+                <br><br>
+                <textarea
+                rows="4" cols="100"
+                name="comments" id="{{product.p_comments}}"
+                placeholder="Εισάγετε σχόλια για το προϊόν"
+                style="resize: none; width: 100%; margin-left: 25px;margin-right: 65px; margin-bottom: 20px; border-radius: 0.2em;"
+                [(ngModel)]="product.p_comments"></textarea>
+              </div>
+            </ul>
+          </div>
+      </div>
+    </div>
+    <!--ΣΝΑΚ-->
+    <h2>ΣΝΑΚ</h2>
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6" *ngFor="let product of products_Snack">
+          <div class="card"
+          style="background-color: #ededdd;
+          margin-bottom: 20px;
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); ">
+            <div class="row">
+              <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3" >
+                <span >
+                  <img src="{{product.p_imagePath}}" class="p_img">
+                </span>
+              </div>
+              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"
+              style="text-align: left; padding-right: 0px;"><h5>{{product.p_name}}</h5><p style="font-size: 12px; margin-bottom: 0px;">{{product.p_info}}</p></div>
+              <div class="col">
+                <ul class="list-group">
+                  <li class="list-group-item" style="background-color: #ededdd; text-align:center;">
+                    <h5>€ {{product.p_price}}</h5>
+                  </li>
+                  <li
+                  *ngIf="product.p_hasExtra"
+                  class="list-group-item"
+                  style="padding:0px; cursor: pointer;"
+                  (click)="product.p_showExtra=!product.p_showExtra"
+                  [ngStyle]="{backgroundColor: product.p_showExtra==true  ? 'rgb(207, 13, 13)' :  '#ededdd' }">
+                      <div class="row" style="padding-top: 6px;">
+                        <p
+                        *ngIf="!product.p_showExtra"
+                        style="font-size: smaller; margin-right: auto; margin-left: auto;" >
+                          <i class="arrow-down"></i>Πρόσθετα
+                        </p>
+                        <p
+                        *ngIf="product.p_showExtra"
+                        style="font-size: smaller; margin-right: auto; margin-left: auto; color: white;" >
+                          <i class="arrow-up"></i>Πρόσθετα
+                        </p>
+                      </div>
+                  </li>
+                  <li
+                  *ngIf="!product.p_hasExtra"
+                  class="list-group-item"
+                  style="padding:0px; cursor: pointer;"
+                  (click)="product.p_showExtra=!product.p_showExtra"
+                  [ngStyle]="{backgroundColor: product.p_showExtra==true  ? 'rgb(207, 13, 13)' :  '#ededdd' }">
+                      <div class="row" style="padding-top: 6px;">
+                        <p
+                        *ngIf="!product.p_showExtra"
+                        style="font-size: smaller; margin-right: auto; margin-left: auto;" >
+                          <i class="arrow-down"></i>Σχόλια
+                        </p>
+                        <p
+                        *ngIf="product.p_showExtra"
+                        style="font-size: smaller; margin-right: auto; margin-left: auto; color: white;" >
+                          <i class="arrow-up"></i>Σχόλια
+                        </p>
+                      </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="col-xs-12 col-sm-2 col-md-2 col-lg" >
+                <span style="align-items: center;">
+                  <p style="margin-bottom: 5px">Ποσότητα</p>
+                  <a (click)="((product.p_quantity > 1) ? product.p_quantity = product.p_quantity - 1 : product.p_quantity = 1)">
+                    <img src="./assets/images/products/minusIcon.webp" style="width: 15px; height:20px; margin-right: 2px;">
+                  </a>
+                  <input type="text" size="1" style="text-align: center; border-radius: 0.5em;" value="{{product.p_quantity}}" >
+                  <a (click)="product.p_quantity = product.p_quantity + 1">
+                    <img src="./assets/images/products/plusIcon.png" style="width: 10px; height:10px; margin-left: 5px; ">
+                  </a>
+                  <br>
+                  <a (click)="onAddCart(product)" style="align-items: center;">
+                    <img src="./assets/images/products/addToCartIcon.png" style="width: 70px; height:30px; margin-top:7px; margin-left:2px; margin-right:2px;">
+                  </a>
+                </span>
+              </div>
+            </div>
+            <ul class="list-group" *ngIf="product.p_showExtra && product.p_hasExtra">
+              <div class="row" style="padding-left: 40px;" >
+                <div class="col-12" style="padding-top: 15px;">
+                  <h6><b>Επιπλέον</b></h6>
+                </div>
+                  <br><br>
+                  <div class="col-6" *ngFor="let more of product.p_extras; let i=index">
+                    <label class="check">{{more.e_name}}
+                      <input type="checkbox"
+                      name="{{more}}" [checked]="more.e_checked" (change)="more.e_checked =! more.e_checked">
+                      <span class="check-box"></span>
+                    </label>
+                  </div>
+              </div>
+              <div class="row" style="padding-left: 40px;" >
+                <div class="col-md-12" style="padding-top: 10px;">
+                  <h6><b>Σχόλια</b></h6>
+                </div>
+                <br><br>
+                <textarea
+                rows="4" cols="100"
+                name="comments" id="{{product.p_comments}}"
+                placeholder="Εισάγετε σχόλια για το προϊόν"
+                style="resize: none; width: 100%; margin-left: 25px;margin-right: 65px; margin-bottom: 20px; border-radius: 0.2em;"
+                [(ngModel)]="product.p_comments"></textarea>
+              </div>
+            </ul>
+            <ul class="list-group" *ngIf="product.p_showExtra && !product.p_hasExtra">
+              <div class="row" style="padding-left: 40px;" >
+                <div class="col-md-12" style="padding-top: 10px;">
+                  <h6><b>Σχόλια</b></h6>
+                </div>
+                <br><br>
+                <textarea
+                rows="4" cols="100"
+                name="comments" id="{{product.p_comments}}"
+                placeholder="Εισάγετε σχόλια για το προϊόν"
+                style="resize: none; width: 100%; margin-left: 25px;margin-right: 65px; margin-bottom: 20px; border-radius: 0.2em;"
+                [(ngModel)]="product.p_comments"></textarea>
+              </div>
+            </ul>
+          </div>
+      </div>
+    </div>
+     <!--ΠΑΓΩΤΑ-->
+     <h2>ΠΑΓΩΤΑ</h2>
+     <div class="row">
+       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6" *ngFor="let product of products_Pagota">
+           <div class="card"
+           style="background-color: #ededdd;
+           margin-bottom: 20px;
+           box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); ">
+             <div class="row">
+               <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3" >
+                 <span >
+                   <img src="{{product.p_imagePath}}" class="p_img">
+                 </span>
+               </div>
+               <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"
+               style="text-align: left; padding-right: 0px;"><h5>{{product.p_name}}</h5><p style="font-size: 12px; margin-bottom: 0px;">{{product.p_info}}</p></div>
+               <div class="col">
+                 <ul class="list-group">
+                   <li class="list-group-item" style="background-color: #ededdd; text-align:center;">
+                     <h5>€ {{product.p_price}}</h5>
+                   </li>
+                   <li
+                   *ngIf="product.p_hasExtra"
+                   class="list-group-item"
+                   style="padding:0px; cursor: pointer;"
+                   (click)="product.p_showExtra=!product.p_showExtra"
+                   [ngStyle]="{backgroundColor: product.p_showExtra==true  ? 'rgb(207, 13, 13)' :  '#ededdd' }">
+                       <div class="row" style="padding-top: 6px;">
+                         <p
+                         *ngIf="!product.p_showExtra"
+                         style="font-size: smaller; margin-right: auto; margin-left: auto;" >
+                           <i class="arrow-down"></i>Πρόσθετα
+                         </p>
+                         <p
+                         *ngIf="product.p_showExtra"
+                         style="font-size: smaller; margin-right: auto; margin-left: auto; color: white;" >
+                           <i class="arrow-up"></i>Πρόσθετα
+                         </p>
+                       </div>
+                   </li>
+                   <li
+                   *ngIf="!product.p_hasExtra"
+                   class="list-group-item"
+                   style="padding:0px; cursor: pointer;"
+                   (click)="product.p_showExtra=!product.p_showExtra"
+                   [ngStyle]="{backgroundColor: product.p_showExtra==true  ? 'rgb(207, 13, 13)' :  '#ededdd' }">
+                       <div class="row" style="padding-top: 6px;">
+                         <p
+                         *ngIf="!product.p_showExtra"
+                         style="font-size: smaller; margin-right: auto; margin-left: auto;" >
+                           <i class="arrow-down"></i>Σχόλια
+                         </p>
+                         <p
+                         *ngIf="product.p_showExtra"
+                         style="font-size: smaller; margin-right: auto; margin-left: auto; color: white;" >
+                           <i class="arrow-up"></i>Σχόλια
+                         </p>
+                       </div>
+                   </li>
+                 </ul>
+               </div>
+               <div class="col-xs-12 col-sm-2 col-md-2 col-lg" >
+                 <span style="align-items: center;">
+                   <p style="margin-bottom: 5px">Ποσότητα</p>
+                   <a (click)="((product.p_quantity > 1) ? product.p_quantity = product.p_quantity - 1 : product.p_quantity = 1)">
+                     <img src="./assets/images/products/minusIcon.webp" style="width: 15px; height:20px; margin-right: 2px;">
+                   </a>
+                   <input type="text" size="1" style="text-align: center; border-radius: 0.5em;" value="{{product.p_quantity}}" >
+                   <a (click)="product.p_quantity = product.p_quantity + 1">
+                     <img src="./assets/images/products/plusIcon.png" style="width: 10px; height:10px; margin-left: 5px; ">
+                   </a>
+                   <br>
+                   <a (click)="onAddCart(product)" style="align-items: center;">
+                     <img src="./assets/images/products/addToCartIcon.png" style="width: 70px; height:30px; margin-top:7px; margin-left:2px; margin-right:2px;">
+                   </a>
+                 </span>
+               </div>
+             </div>
+             <ul class="list-group" *ngIf="product.p_showExtra && product.p_hasExtra">
+               <div class="row" style="padding-left: 40px;" >
+                 <div class="col-12" style="padding-top: 15px;">
+                   <h6><b>Επιπλέον</b></h6>
+                 </div>
+                   <br><br>
+                   <div class="col-6" *ngFor="let more of product.p_extras; let i=index">
+                     <label class="check">{{more.e_name}}
+                       <input type="checkbox"
+                       name="{{more}}" [checked]="more.e_checked" (change)="more.e_checked =! more.e_checked">
+                       <span class="check-box"></span>
+                     </label>
+                   </div>
+               </div>
+               <div class="row" style="padding-left: 40px;" >
+                 <div class="col-md-12" style="padding-top: 10px;">
+                   <h6><b>Σχόλια</b></h6>
+                 </div>
+                 <br><br>
+                 <textarea
+                 rows="4" cols="100"
+                 name="comments" id="{{product.p_comments}}"
+                 placeholder="Εισάγετε σχόλια για το προϊόν"
+                 style="resize: none; width: 100%; margin-left: 25px;margin-right: 65px; margin-bottom: 20px; border-radius: 0.2em;"
+                 [(ngModel)]="product.p_comments"></textarea>
+               </div>
+             </ul>
+             <ul class="list-group" *ngIf="product.p_showExtra && !product.p_hasExtra">
+               <div class="row" style="padding-left: 40px;" >
+                 <div class="col-md-12" style="padding-top: 10px;">
+                   <h6><b>Σχόλια</b></h6>
+                 </div>
+                 <br><br>
+                 <textarea
+                 rows="4" cols="100"
+                 name="comments" id="{{product.p_comments}}"
+                 placeholder="Εισάγετε σχόλια για το προϊόν"
+                 style="resize: none; width: 100%; margin-left: 25px;margin-right: 65px; margin-bottom: 20px; border-radius: 0.2em;"
+                 [(ngModel)]="product.p_comments"></textarea>
+               </div>
+             </ul>
+           </div>
+       </div>
+     </div>
+  </div>
+</div>
+
+
+
+
+
